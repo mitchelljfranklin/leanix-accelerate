@@ -76,6 +76,14 @@ window.__leanixFeatures__ = window.__leanixFeatures__ || {};
   }
 
   var CHANGELOG = {
+    "1.0.7": {
+      title: "Here\u2019s what\u2019s new in v1.0.7:",
+      changes: [
+        "Fiori reskin support \u2014 export buttons now match the new LeanIX theme with SAP blue styling",
+      ],
+      linkText: "View all features on GitHub \u2192",
+      linkUrl: "https://github.com/mitchelljfranklin/LeanIX-Accelerate#-features",
+    },
     "1.0.6": {
       title: "Here\u2019s what\u2019s new in v1.0.6:",
       changes: [

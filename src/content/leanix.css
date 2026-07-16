@@ -104,25 +104,28 @@
 /*
  * Inline header button
  * Features: print-export (Export to Print), documents-export (Documents Export)
- * Sized to match the native LeanIX lx-button (size="large") height of 36px.
- * Uses the same brand color (#5c6ac4) as the floating variant.
+ * Matches the native LeanIX lx-button Fiori reskin (size="medium", color="primary", mode="solid").
  */
 .lx-ext-btn-inline {
-  padding: 7px 16px;
-  background: #5c6ac4;
+  height: 26px;
+  padding: 0 7px;
+  background: rgb(0, 112, 242);
   color: #fff;
-  border: none;
-  border-radius: 4px;
+  border: 1px solid rgb(0, 112, 242);
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.4;
-  height: 32px;
+  font-family: "72-Bold", "72-Boldfull", "72", "72full", Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  min-width: 32px;
+  vertical-align: middle;
 }
 
 /* Darken the inline button on hover. */
 .lx-ext-btn-inline:hover {
-  background: #4a57b3;
+  background: rgb(0, 90, 210);
+  border-color: rgb(0, 90, 210);
 }
 
 
