@@ -4,6 +4,7 @@ const FEATURE_LIST = [
   { key: "documentsExport", label: "Documents Export", desc: "Export document lists (Architecture Decisions) to Excel" },
   { key: "diagramDetails", label: "Diagram Details", desc: "One-click button to open Diagram Details on diagram pages" },
   { key: "updateNotification", label: "Update Notification", desc: "Show changelog when the extension is updated" },
+  { key: "emojiPicker", label: "Emoji Picker", desc: "Add an emoji picker to rich-text editors" },
 ];
 
 document.querySelector(".version").textContent = "v" + chrome.runtime.getManifest().version;

@@ -112,7 +112,11 @@ LeanIX is powerful, but everyday workflows involve repetitive clicks — exporti
       <p><strong>Diagram pages</strong></p>
       <p>A gear icon button next to the Edit button. Opens the Diagram Details panel in one click — no need to open the More dropdown first. Matches the settings icon used in the dropdown.</p>
     </td>
-    <td width="50%"></td>
+    <td width="50%">
+      <h3>😀 Emoji Picker</h3>
+      <p><strong>Rich-text editors (edit mode)</strong></p>
+      <p>An emoji button in every rich-text toolbar. Opens a searchable, categorized emoji picker that inserts emoji straight into your document at the cursor.</p>
+    </td>
   </tr>
 </table>
 

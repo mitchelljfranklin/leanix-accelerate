@@ -41,6 +41,7 @@ LeanIX Accelerate — a Chrome Manifest V3 browser extension that injects custom
 | Documents Export | `documentsExport` | `src/content/features/documents-export.js` | Doc list / Architecture Decisions |
 | Diagram Details | `diagramDetails` | `src/content/features/diagram-details.js` | Diagram pages — one-click Diagram Details shortcut |
 | Update Notification | `updateNotification` | `src/content/features/update-notification.js` | All — shows changelog on version update |
+| Emoji Picker | `emojiPicker` | `src/content/features/emoji-picker.js` (+ `emoji-data.js`) | Rich-text editors (edit mode) |
 
 ## How the Extension Works
 

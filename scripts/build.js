@@ -31,6 +31,8 @@ const CONTENT_ORDER = [
   "src/content/features/documents-export.js",
   "src/content/features/diagram-details.js",
   "src/content/features/update-notification.js",
+  "src/content/features/emoji-data.js",
+  "src/content/features/emoji-picker.js",
   "src/content/index.js",
 ];
 

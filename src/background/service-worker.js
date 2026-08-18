@@ -8,6 +8,7 @@ chrome.runtime.onInstalled.addListener((details) => {
           documentsExport: true,
           diagramDetails: true,
           updateNotification: true,
+          emojiPicker: true,
         },
         theme: "default",
       },

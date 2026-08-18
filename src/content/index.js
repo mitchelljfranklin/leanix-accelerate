@@ -13,6 +13,7 @@
     "documentsExport",
     "diagramDetails",
     "updateNotification",
+    "emojiPicker",
   ];
 
   for (const key of featureOrder) {

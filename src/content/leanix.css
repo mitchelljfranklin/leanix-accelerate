@@ -398,3 +398,117 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+
+/* ==========================================================================
+ * 7. Emoji Picker
+ * ========================================================================== */
+
+/*
+ * Emoji toolbar button
+ * Feature: emoji-picker
+ * Square icon button matching the native rich-text toolbar buttons.
+ * Injected into every lx-rich-text-editor-toolbar when in edit mode.
+ */
+.lx-ext-emoji-btn {
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  line-height: 1;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  transition: background 0.15s;
+}
+
+.lx-ext-emoji-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/*
+ * Emoji picker popover
+ * Feature: emoji-picker
+ * Fixed-position panel anchored below the toolbar button. Positioned via JS
+ * (left/top) and hidden/shown via inline display toggling.
+ */
+.lx-ext-emoji-popover {
+  position: fixed;
+  z-index: 9999999;
+  width: 344px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+/*
+ * Emoji search input
+ * Feature: emoji-picker
+ */
+.lx-ext-emoji-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  margin-bottom: 8px;
+  outline: none;
+  font-family: inherit;
+}
+
+.lx-ext-emoji-search:focus {
+  border-color: #5c6ac4;
+}
+
+/*
+ * Emoji grid
+ * Feature: emoji-picker
+ * Flex-wrapped, scrollable grid of emoji buttons grouped under category headers.
+ */
+.lx-ext-emoji-grid {
+  max-height: 320px;
+  overflow-y: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.lx-ext-emoji-category {
+  flex-basis: 100%;
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+  padding: 8px 4px 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lx-ext-emoji-grid.lx-ext-emoji-search-mode .lx-ext-emoji-category {
+  display: none;
+}
+
+.lx-ext-emoji-item {
+  width: 32px;
+  height: 32px;
+  font-size: 20px;
+  line-height: 1;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s;
+}
+
+.lx-ext-emoji-item:hover {
+  background: #f0f2ff;
+}

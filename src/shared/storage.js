@@ -4,6 +4,7 @@ var FEATURE_DEFAULTS = {
   documentsExport: true,
   diagramDetails: true,
   updateNotification: true,
+  emojiPicker: true,
 };
 
 var DEFAULT_SETTINGS = {
