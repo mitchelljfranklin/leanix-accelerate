@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-v1.0.5-blue" />
+  <img src="https://img.shields.io/badge/version-v1.1.0-blue" />
   <img src="https://img.shields.io/badge/manifest-V3-4c1" />
   <img src="https://img.shields.io/badge/license-GPL%203.0-brightgreen" />
   <img src="https://img.shields.io/badge/Chrome-supported-4285F4?logo=googlechrome&logoColor=white" />
@@ -224,6 +224,14 @@ Load the extension unpacked in Chrome/Edge:
 2. **Load unpacked** → select the project folder
 3. Make changes → click the reload icon on the extension card
 4. Refresh your LeanIX page
+
+#### AI Usage
+
+While I believe AI can be a powerful tool for development — and I personally use AI assistants to help manage documentation and reviews — it must remain a tool in the hands of a capable developer. In this project, **you are the pilot**; you are responsible for coding, confirming, and refining your contributions.
+
+To help those using AI tools, I've created an [AGENTS.md](AGENTS.md) file specifically for your assistants to follow. Please ensure your agent adheres to these guidelines, as non-compliant code will be rejected regardless of how well it functions.
+
+Most importantly, please ensure you **fully understand the code you are submitting**. A "black box" approach where AI generates code that the human contributor doesn't understand is not permitted here.
 
 ### Adding a new feature
 
