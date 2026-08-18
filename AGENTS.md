@@ -26,7 +26,7 @@ LeanIX Accelerate — a Chrome Manifest V3 browser extension that injects custom
 
 - **Runtime:** Chrome Manifest V3 browser extension
 - **Bundler:** esbuild — content scripts bundled into a single IIFE via `npm run build`
-- **JS Style:** ES5-compatible `function` declarations inside IIFEs, `const`/`let` for local variables, `var` for declarations shared across files in the bundle, no arrow functions in object methods
+- **JS Style:** Modern JS (`const`/`let`, arrow functions, `async`/`await`, `class`, optional chaining). The one hard rule: top-level declarations shared across bundle files must be `var` (see below).
 - **CSS:** Single file `src/content/leanix.css`, all classes prefixed `lx-ext-`, no inline styles
 - **Lint:** ESLint + Prettier (`npm run lint`)
 - **Node:** >= 18 (dev tooling only, not needed at runtime)
@@ -41,6 +41,7 @@ LeanIX Accelerate — a Chrome Manifest V3 browser extension that injects custom
 | Documents Export | `documentsExport` | `src/content/features/documents-export.js` | Doc list / Architecture Decisions |
 | Diagram Details | `diagramDetails` | `src/content/features/diagram-details.js` | Diagram pages — one-click Diagram Details shortcut |
 | Update Notification | `updateNotification` | `src/content/features/update-notification.js` | All — shows changelog on version update |
+| Emoji Picker | `emojiPicker` | `src/content/features/emoji-picker.js` (+ `emoji-data.js`) | Rich-text editors (edit mode) |
 
 ## How the Extension Works
 
@@ -56,12 +57,10 @@ Page load → content scripts injected (in manifest order)
       1. FEATURE_DEFAULTS / DEFAULT_SETTINGS / SettingsStore defined (var)
       2. DOMUtils defined (var)
       3. ModalUtils defined (var)
-      4. data-export.js (registers on window.__leanixFeatures__)
-      5. print-export.js (registers on window.__leanixFeatures__)
-      6. documents-export.js (registers on window.__leanixFeatures__)
-      7. diagram-details.js (registers on window.__leanixFeatures__)
-      8. update-notification.js (registers on window.__leanixFeatures__)
-      9. index.js runs:
+      4-8. feature files (data-export, print-export, documents-export, diagram-details, update-notification) register on window.__leanixFeatures__
+      9. emoji-data.js defines EMOJI_CATEGORIES (var)
+      10. emoji-picker.js registers on window.__leanixFeatures__
+      11. index.js runs:
           a. Checks isLeanIXPage()
           b. Reads SettingsStore.getAll()
           c. Iterates featureOrder, calls init() on each enabled feature
@@ -260,28 +259,46 @@ When modifying the build script (`scripts/build.js`):
 
 All code must be written in a human-readable format — this applies equally to hand-written and AI-generated code. Avoid minified, obfuscated, or machine-optimized code in any source files.
 
-The **only** minification or transformation happens in the build step (`npm run build`). All `.js`, `.css`, and `.html` files in `src/` must remain unminified and readable.
+The **only** minification or transformation happens in the build step (`npm run build`). Code we author (`.js`, `.css`, `.html` in `src/`) must remain unminified and readable — vendored third-party libraries in `src/library/` (e.g. `xlsx.full.min.js`) are the exception and ship minified by design.
 
-### Variable declarations within the bundle
+### Variable names — use descriptive names, not shorthand
 
-The esbuild IIFE concatenates all content scripts into a single function scope. Top-level declarations that are referenced by OTHER files in the bundle **must** use `var`. This is the contract that makes cross-file references work inside the IIFE. Examples: `var SettingsStore`, `var DOMUtils`, `var ModalUtils`, `var FEATURE_DEFAULTS`, `var DEFAULT_SETTINGS`.
+- Variable names must clearly describe what they hold. Avoid single-letter or heavily abbreviated names (`el`, `e`, `cb`, `k`, `v`, `t`, `n`, `o`, `arr`, `obj`, `str`, `num`).
+- Acceptable exceptions: loop index `i` (and `j`/`k` for nested loops), `key`/`value` in object iteration, `err` for caught errors.
+- Callback parameters must use meaningful names — e.g. `function (element)` not `function (e)`, `function (selector)` not `function (el)`.
+- Applies to all code: hand-written and AI-generated, content scripts, options page, and popup.
 
-Top-level declarations used only within their own file **should** use `const` or `let` for clarity, but `var` is acceptable if the file already uses it consistently.
+### Variable declarations across files
 
-Never use implicit globals (assignment without `var`/`let`/`const`).
+The esbuild build concatenates all content scripts into a single IIFE, so a top-level declaration in one file is visible to files that come later in `CONTENT_ORDER`. Two patterns exist:
+
+- **Namespace objects (preferred)** — attach shared state to a single object so references are explicit and order-independent. The feature registry already does this: `window.__leanixFeatures__`. Prefer adding new shared state here rather than introducing new free-floating globals.
+- **`var` hoisting (legacy)** — the original shared libs are bare top-level `var`s relied on by later files: `var SettingsStore`, `var DOMUtils`, `var ModalUtils`, `var FEATURE_DEFAULTS`, `var DEFAULT_SETTINGS`, `var EMOJI_CATEGORIES`. This works only because `CONTENT_ORDER` puts them first; treat it as a known limitation and don't extend it.
+
+Top-level declarations used only within their own file **should** use `const` or `let`.
+
+Never use implicit globals (assignment without `var`/`let`/`const`). In sloppy mode these become `window` properties; in strict mode they throw `ReferenceError` — and some files already enable `"use strict"` (e.g. `modal.js`, `update-notification.js`).
+
+### ESLint allows cross-file `var` references
+
+`.eslintrc.json` sets `no-undef: "off"` (so cross-file `var` references lint clean) and `no-unused-vars` with `varsIgnorePattern: ^(DOMUtils|ModalUtils|SettingsStore|FEATURE_DEFAULTS|DEFAULT_SETTINGS|EMOJI_CATEGORIES)$`. Add any new shared `var` binding to that pattern or lint flags it as unused.
 
 ### No arrow functions in object methods
 
-Use `function` declarations for object methods (consistent with ES5 compatibility target).
+Use `function` declarations for methods on the `window.__leanixFeatures__.<feature>` objects (arrow functions are fine everywhere else).
 
 ### CSS convention — `leanix.css` is the single stylesheet
 
 All CSS rules for content scripts **must** be added to `src/content/leanix.css` using the `lx-ext-` prefix. Do **not**:
 - Set inline `style=""` attributes on elements in HTML
-- Set `element.style.*` or `element.style.cssText` in JavaScript (see exception below)
-- Add `<style>` blocks to any HTML file
+- Set `element.style.*` or `element.style.cssText` in JavaScript (see exceptions below)
+- Add `<style>` blocks to any HTML source file (`.html`)
 
-**Exception:** Modal elements (`ModalUtils`) set critical layout properties (position, display, z-index, background, border, box-shadow) as inline styles via JS to prevent LeanIX platform CSS from overriding them. Hover states and transitions remain in `leanix.css`.
+If JavaScript needs to apply a style, add or remove a **class** (`element.classList.add` / `remove`) and define the style for that class in `leanix.css`. This keeps all visual rules in one auditable place and avoids CSP issues with inline styles in content scripts. For a whole stylesheet injected at runtime, use `DOMUtils.injectStylesheet(id, css)` (appends a `<style>` element) rather than inline `style=` attributes.
+
+**Exception 1 — computed/dynamic values:** inline styles are acceptable when the value can't be known at CSS-authoring time (e.g. `element.style.top`/`left` for popover positioning, `element.style.transform` for image scaling, `element.style.width` for resize handles). Prefer a class whenever the value is static.
+
+**Exception 2 — modal structure:** `ModalUtils` sets critical layout properties (position, display, z-index, background, border, box-shadow) as inline styles via JS to prevent LeanIX platform CSS from overriding them. Hover states and transitions remain in `leanix.css`.
 
 Popup and options pages load their own separate CSS files (`popup.css`, `options.css`).
 
@@ -432,6 +449,12 @@ SettingsStore.onChange(callback)     // listens for storage changes
 | `.lx-ext-modal-footer` | modal.js | Right-aligned button group with top border |
 | `.lx-ext-btn-cancel` | modal.js | Light/outline cancel footer button |
 | `.lx-ext-btn-confirm` | modal.js | Primary confirm footer button (#5c6ac4) |
+| `.lx-ext-emoji-btn` | emoji-picker | Square emoji toolbar button |
+| `.lx-ext-emoji-popover` | emoji-picker | Fixed searchable emoji panel (positioned via JS) |
+| `.lx-ext-emoji-search` | emoji-picker | Search input at the top of the popover |
+| `.lx-ext-emoji-grid` | emoji-picker | Scrollable, flex-wrapped grid of emoji |
+| `.lx-ext-emoji-category` | emoji-picker | Category header inside the grid |
+| `.lx-ext-emoji-item` | emoji-picker | Individual emoji button |
 
 ## Critical Rules
 
@@ -505,25 +528,30 @@ var blob = new Blob([buf], { type: "application/vnd.openxmlformats-officedocumen
 
 `scripts/build.js` does everything:
 
-1. Reads `package.json` for the version number
+1. Reads `package.json` for the version number (for logging only — it is NOT injected anywhere)
 2. Concatenates content scripts in `CONTENT_ORDER` and passes them through esbuild (`transformSync`, `format: "iife"`, `target: "es2015"`) to produce `src/content/content-bundle.js`
-3. Creates staging directories (in system temp) and copies `manifest.json`, `icons/`, `src/`, and `dist/` into each
+3. Creates staging directories (in system temp) and copies `manifest.json`, `icons/`, and `src/` into each (NOT `dist/`)
 4. Generates browser-specific manifests from the base `manifest.json`:
-   - **Chrome** — copied as-is (MV3, includes `update_url`)
-   - **Edge** — identical to Chrome
+   - **Chrome / Edge** — `manifest.json` copied as-is
    - **Firefox** — adds `browser_specific_settings.gecko` with `id: "leanix-extension@example.com"` and `strict_min_version: "128.0"`
 5. Packages each into `dist/leanix-extension-{Browser}.zip`
 
 Output:
-- `src/content/content-bundle.js` — single IIFE bundle of all content scripts (~50 KB), gitignored
+- `src/content/content-bundle.js` — single IIFE bundle of all content scripts (~172 KB), gitignored
 - `dist/leanix-extension-chrome.zip`
 - `dist/leanix-extension-edge.zip`
 - `dist/leanix-extension-firefox.zip`
 
-`dist/` is gitignored. The version is read from `package.json` and injected into all manifests. To release:
+Gotchas:
+- `createZip()` shells out to the `zip` CLI (`zip -r`). On Windows `zip` is usually missing, so zips fail silently (prints "Try: cd dist && zip -r ...") while the bundle still builds. The bundle is the real artifact; zips are only needed for store upload.
+- The version is NOT injected into manifests. Bump `version` in BOTH `package.json` and `manifest.json` manually to release.
+- The update notification reads `chrome.runtime.getManifest().version` (the manifest version) and matches it against a `CHANGELOG` object in `update-notification.js`. Every release must add a matching `CHANGELOG` entry or the notification silently falls back to the latest key.
+
+`dist/` is gitignored. To release:
 1. Bump `version` in `package.json` and `manifest.json`
-2. Run `npm run build`
-3. Upload the zips from `dist/` to the respective stores
+2. Add a `CHANGELOG` entry in `update-notification.js` keyed by the new version
+3. Run `npm run build`
+4. Upload the zips from `dist/` to the respective stores
 
 ## Commands
 
@@ -563,7 +591,8 @@ To see content-script console output, inspect the LeanIX page — content script
 - Document fields: `lx-document-fields-form`
 - Header bar: `.headerUpdates`
 - Editor blocks: `.editorBlock` with `:scope > .formTitle`
-- Rich text editor: `lx-rich-text-editor` > `.ProseMirror`
+- Rich text editor: `lx-rich-text-editor` > `.viewMode` / `.editMode` > `tiptap-editor` > `.ProseMirror` (`contenteditable`)
+- Rich text toolbar (edit mode only): `lx-rich-text-editor-toolbar` > `.toolbar` (`.toolbarHidden` when the field is unfocused)
 - Date fields: `lx-document-date-select` > `.formTitle` + `p`
 - Fact sheet lists: `lx-document-fact-sheet-list` > `tr.factSheetItem`
 - User lists: `lx-document-users-list` > `.selectedUser`
@@ -575,6 +604,14 @@ To see content-script console output, inspect the LeanIX page — content script
 - Table: `table.table-hover`
 - Rows: `tr.documentsItem`
 - Columns: `.displayIdColumn`, `.titleColumn a`, `.statusColumn lx-badge span`, `.ownerColumn lx-documents-list-creator span`, `.lastUpdatedColumn span`
+
+## Rich-text editor (Tiptap/ProseMirror) gotchas
+
+The emoji picker (and any future editor integration) works against LeanIX's Tiptap/ProseMirror editor. Three non-obvious behaviors cost real debugging time:
+
+- **Cursor insertion** — clicking a toolbar button blurs the editor and ProseMirror resets its selection to the document start. Capture the cursor on button `mousedown` (before blur) and replay it at insert time: `view.state.tr.insertText(emoji, from, from)` if the view is reachable, else restore the DOM `Range` and use `document.execCommand("insertText")`.
+- **Button injection** — inject toolbar buttons directly on `MutationObserver` detection; don't gate on `IntersectionObserver` (unfocused toolbars carry `toolbarHidden` and never intersect). Guard duplicates with a per-toolbar class check, not a single global id.
+- **Popover scroll-close** — debounce the scroll-close handler (~250ms): focusing elements on open can fire a spurious scroll that otherwise closes the popover immediately.
 
 ## README Sections Reference
 

@@ -9,7 +9,7 @@
     "ecmaVersion": 2022
   },
   "rules": {
-    "no-unused-vars": ["warn", { "args": "none", "varsIgnorePattern": "^(DOMUtils|ModalUtils|SettingsStore|FEATURE_DEFAULTS|DEFAULT_SETTINGS)$" }],
+    "no-unused-vars": ["warn", { "args": "none", "varsIgnorePattern": "^(DOMUtils|ModalUtils|SettingsStore|FEATURE_DEFAULTS|DEFAULT_SETTINGS|EMOJI_CATEGORIES)$" }],
     "no-undef": "off",
     "no-console": "off"
   }

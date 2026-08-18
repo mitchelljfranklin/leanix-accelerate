@@ -144,6 +144,34 @@ The exported `.xlsx` file contains:
 
 ---
 
+## Feature: Emoji Picker
+
+**Where it works:** Rich-text editors (e.g. the Project / Initiative Name field on Architecture Decisions) when the document is in **edit mode**.
+
+**What it does:** Adds an emoji button (😀) to the end of every rich-text editor toolbar. Clicking it opens a searchable, categorized emoji picker.
+
+### How to use
+
+1. Open a document in LeanIX and switch to **edit mode**
+2. Click into a rich-text field (one with the bold/italic/table toolbar)
+3. Click the **😀** button at the end of the toolbar
+4. Type to search, or browse the categories, then click an emoji to insert it at the cursor
+
+| Control | What it does |
+|---|---|
+| **Search box** | Filters the list live by name or shortcode |
+| **Category headers** | Group emoji into Smileys, People, Animals, Food, Travel, Activities, Objects, Symbols, Flags |
+| **Emoji button** | Inserts the emoji at the current cursor position |
+
+### Tips
+- Emoji are inserted as plain text, so they save and reload with the document like any other character
+- The button only appears in edit mode — it's hidden while viewing a document
+- If you don't see the button, make sure the feature is toggled **on** in the popup
+
+<p align="right"><sub><a href="#">⬆ back to top</a></sub></p>
+
+---
+
 ## Full Settings Page
 
 Access the settings page by clicking **Configure** in the popup, or via `chrome://extensions` → LeanIX Accelerate → **Extension options**.
