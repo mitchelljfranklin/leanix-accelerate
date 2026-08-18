@@ -12,6 +12,8 @@ Unlock new levels of efficiency and productivity with one-click export buttons i
 
 🗂️ Diagram Details — Diagram pages. A gear icon button next to the Edit button that opens the Diagram Details panel in one click — no need to open the More dropdown.
 
+😀 Emoji Picker — Rich-text editors (edit mode). An emoji button in every rich-text toolbar opens a searchable, categorized picker that inserts emoji straight into your document at the cursor.
+
 ⚙️ Smart Controls — Popup & full settings page. Toggle any feature on/off from the extension popup. Full settings panel with reset-to-defaults. Buttons survive page navigation — no reloads needed.
 
 🔒 Privacy

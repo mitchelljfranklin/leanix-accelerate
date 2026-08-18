@@ -37,14 +37,14 @@ var ModalUtils = (function () {
 
   function ModalInstance(options) {
     var overlay = createOverlay();
-    var dialogEl = null;
+    var dialogElement = null;
     var closeButton = null;
-    var headerEl = null;
-    var titleEl = null;
-    var contentEl = null;
-    var footerEl = null;
-    var cancelBtn = null;
-    var confirmBtn = null;
+    var headerElement = null;
+    var titleElement = null;
+    var contentElement = null;
+    var footerElement = null;
+    var cancelButton = null;
+    var confirmButton = null;
     var self = this;
     var destroyed = false;
 
@@ -63,18 +63,18 @@ var ModalUtils = (function () {
     }
 
     function build() {
-      dialogEl = document.createElement("div");
-      dialogEl.className = "lx-ext-modal";
-      dialogEl.setAttribute("role", "dialog");
-      dialogEl.style.position = "relative";
-      dialogEl.style.background = "#fff";
-      dialogEl.style.borderRadius = "6px";
-      dialogEl.style.boxShadow = "0 8px 32px rgba(0, 0, 0, 0.2)";
-      dialogEl.style.display = "flex";
-      dialogEl.style.flexDirection = "column";
-      dialogEl.style.overflow = "hidden";
-      dialogEl.style.minWidth = getOption("width");
-      dialogEl.style.maxWidth = getOption("width");
+      dialogElement = document.createElement("div");
+      dialogElement.className = "lx-ext-modal";
+      dialogElement.setAttribute("role", "dialog");
+      dialogElement.style.position = "relative";
+      dialogElement.style.background = "#fff";
+      dialogElement.style.borderRadius = "6px";
+      dialogElement.style.boxShadow = "0 8px 32px rgba(0, 0, 0, 0.2)";
+      dialogElement.style.display = "flex";
+      dialogElement.style.flexDirection = "column";
+      dialogElement.style.overflow = "hidden";
+      dialogElement.style.minWidth = getOption("width");
+      dialogElement.style.maxWidth = getOption("width");
 
       if (getOption("closable")) {
         closeButton = document.createElement("button");
@@ -103,48 +103,48 @@ var ModalUtils = (function () {
             getOption("onClose")();
           }
         });
-        dialogEl.appendChild(closeButton);
+        dialogElement.appendChild(closeButton);
       }
 
       if (getOption("title")) {
-        headerEl = document.createElement("div");
-        headerEl.className = "lx-ext-modal-header";
-        headerEl.style.padding = "18px 24px 14px";
-        headerEl.style.borderBottom = "1px solid #e8e8e8";
-        titleEl = document.createElement("h2");
-        titleEl.className = "lx-ext-modal-title";
-        titleEl.style.fontSize = "18px";
-        titleEl.style.fontWeight = "600";
-        titleEl.style.color = "#222";
-        titleEl.style.margin = "0";
-        titleEl.textContent = getOption("title");
-        headerEl.appendChild(titleEl);
-        dialogEl.appendChild(headerEl);
+        headerElement = document.createElement("div");
+        headerElement.className = "lx-ext-modal-header";
+        headerElement.style.padding = "18px 24px 14px";
+        headerElement.style.borderBottom = "1px solid #e8e8e8";
+        titleElement = document.createElement("h2");
+        titleElement.className = "lx-ext-modal-title";
+        titleElement.style.fontSize = "18px";
+        titleElement.style.fontWeight = "600";
+        titleElement.style.color = "#222";
+        titleElement.style.margin = "0";
+        titleElement.textContent = getOption("title");
+        headerElement.appendChild(titleElement);
+        dialogElement.appendChild(headerElement);
       }
 
-      contentEl = document.createElement("div");
-      contentEl.className = "lx-ext-modal-content";
-      contentEl.style.padding = "20px 24px";
-      contentEl.style.fontSize = "14px";
-      contentEl.style.color = "#333";
-      contentEl.style.lineHeight = "1.5";
-      contentEl.style.overflowY = "auto";
-      contentEl.style.maxHeight = "60vh";
+      contentElement = document.createElement("div");
+      contentElement.className = "lx-ext-modal-content";
+      contentElement.style.padding = "20px 24px";
+      contentElement.style.fontSize = "14px";
+      contentElement.style.color = "#333";
+      contentElement.style.lineHeight = "1.5";
+      contentElement.style.overflowY = "auto";
+      contentElement.style.maxHeight = "60vh";
 
       if (options.content) {
         setContent(options.content);
       }
 
-      dialogEl.appendChild(contentEl);
+      dialogElement.appendChild(contentElement);
 
       if (getOption("footer") !== false) {
-        footerEl = document.createElement("div");
-        footerEl.className = "lx-ext-modal-footer";
-        footerEl.style.display = "flex";
-        footerEl.style.justifyContent = "flex-end";
-        footerEl.style.gap = "8px";
-        footerEl.style.padding = "14px 24px";
-        footerEl.style.borderTop = "1px solid #e8e8e8";
+        footerElement = document.createElement("div");
+        footerElement.className = "lx-ext-modal-footer";
+        footerElement.style.display = "flex";
+        footerElement.style.justifyContent = "flex-end";
+        footerElement.style.gap = "8px";
+        footerElement.style.padding = "14px 24px";
+        footerElement.style.borderTop = "1px solid #e8e8e8";
 
         var footerConfig = typeof options.footer === "object" ? options.footer : {};
         var showCancel = footerConfig.cancelText !== undefined || options.cancelText;
@@ -152,46 +152,46 @@ var ModalUtils = (function () {
 
         if (showCancel) {
           var cancelLabel = footerConfig.cancelText || options.cancelText || "Cancel";
-          cancelBtn = document.createElement("button");
-          cancelBtn.type = "button";
-          cancelBtn.className = "lx-ext-btn-cancel";
-          cancelBtn.style.padding = "8px 20px";
-          cancelBtn.style.fontSize = "14px";
-          cancelBtn.style.fontWeight = "500";
-          cancelBtn.style.background = "#f5f6fa";
-          cancelBtn.style.color = "#555";
-          cancelBtn.style.border = "1px solid #ddd";
-          cancelBtn.style.borderRadius = "4px";
-          cancelBtn.style.cursor = "pointer";
-          cancelBtn.textContent = cancelLabel;
-          cancelBtn.addEventListener("click", function () {
+          cancelButton = document.createElement("button");
+          cancelButton.type = "button";
+          cancelButton.className = "lx-ext-btn-cancel";
+          cancelButton.style.padding = "8px 20px";
+          cancelButton.style.fontSize = "14px";
+          cancelButton.style.fontWeight = "500";
+          cancelButton.style.background = "#f5f6fa";
+          cancelButton.style.color = "#555";
+          cancelButton.style.border = "1px solid #ddd";
+          cancelButton.style.borderRadius = "4px";
+          cancelButton.style.cursor = "pointer";
+          cancelButton.textContent = cancelLabel;
+          cancelButton.addEventListener("click", function () {
             var onCancel = footerConfig.onCancel || options.onCancel;
             if (typeof onCancel === "function") {
               onCancel();
             }
             self.hide();
           });
-          footerEl.appendChild(cancelBtn);
+          footerElement.appendChild(cancelButton);
         }
 
         if (showConfirm) {
           var confirmLabel = footerConfig.confirmText || options.confirmText || "OK";
-          confirmBtn = document.createElement("button");
-          confirmBtn.type = "button";
-          confirmBtn.className = "lx-ext-btn-confirm";
+          confirmButton = document.createElement("button");
+          confirmButton.type = "button";
+          confirmButton.className = "lx-ext-btn-confirm";
           if (footerConfig.confirmClass || options.confirmClass) {
-            confirmBtn.className += " " + (footerConfig.confirmClass || options.confirmClass);
+            confirmButton.className += " " + (footerConfig.confirmClass || options.confirmClass);
           }
-          confirmBtn.style.padding = "8px 20px";
-          confirmBtn.style.fontSize = "14px";
-          confirmBtn.style.fontWeight = "500";
-          confirmBtn.style.background = "#5c6ac4";
-          confirmBtn.style.color = "#fff";
-          confirmBtn.style.border = "none";
-          confirmBtn.style.borderRadius = "4px";
-          confirmBtn.style.cursor = "pointer";
-          confirmBtn.textContent = confirmLabel;
-          confirmBtn.addEventListener("click", function () {
+          confirmButton.style.padding = "8px 20px";
+          confirmButton.style.fontSize = "14px";
+          confirmButton.style.fontWeight = "500";
+          confirmButton.style.background = "#5c6ac4";
+          confirmButton.style.color = "#fff";
+          confirmButton.style.border = "none";
+          confirmButton.style.borderRadius = "4px";
+          confirmButton.style.cursor = "pointer";
+          confirmButton.textContent = confirmLabel;
+          confirmButton.addEventListener("click", function () {
             var onConfirm = footerConfig.onConfirm || options.onConfirm;
             var hide = true;
             if (typeof onConfirm === "function") {
@@ -201,13 +201,13 @@ var ModalUtils = (function () {
               self.hide();
             }
           });
-          footerEl.appendChild(confirmBtn);
+          footerElement.appendChild(confirmButton);
         }
 
-        dialogEl.appendChild(footerEl);
+        dialogElement.appendChild(footerElement);
       }
 
-      overlay.appendChild(dialogEl);
+      overlay.appendChild(dialogElement);
 
       overlay.addEventListener("click", function (event) {
         if (event.target !== overlay) return;
@@ -220,19 +220,19 @@ var ModalUtils = (function () {
     }
 
     function setContent(newContent) {
-      while (contentEl.firstChild) {
-        contentEl.removeChild(contentEl.firstChild);
+      while (contentElement.firstChild) {
+        contentElement.removeChild(contentElement.firstChild);
       }
       if (typeof newContent === "string") {
-        contentEl.innerHTML = newContent;
+        contentElement.innerHTML = newContent;
       } else if (newContent && newContent.nodeType) {
-        contentEl.appendChild(newContent);
+        contentElement.appendChild(newContent);
       }
     }
 
     this.show = function () {
       if (destroyed) return;
-      if (!dialogEl) build();
+      if (!dialogElement) build();
       overlay.classList.add("lx-ext-modal-visible");
       overlay.style.opacity = "1";
       overlay.style.pointerEvents = "auto";
@@ -253,32 +253,32 @@ var ModalUtils = (function () {
     };
 
     this.setTitle = function (title) {
-      if (!titleEl) return;
-      titleEl.textContent = title;
+      if (!titleElement) return;
+      titleElement.textContent = title;
     };
 
     this.setContent = function (newContent) {
-      if (!contentEl) return;
+      if (!contentElement) return;
       setContent(newContent);
     };
 
     this.setConfirmText = function (text) {
-      if (!confirmBtn) return;
-      confirmBtn.textContent = text;
+      if (!confirmButton) return;
+      confirmButton.textContent = text;
     };
 
     this.setCancelText = function (text) {
-      if (!cancelBtn) return;
-      cancelBtn.textContent = text;
+      if (!cancelButton) return;
+      cancelButton.textContent = text;
     };
 
     this.setConfirmEnabled = function (enabled) {
-      if (!confirmBtn) return;
-      confirmBtn.disabled = !enabled;
+      if (!confirmButton) return;
+      confirmButton.disabled = !enabled;
     };
 
     this.getElement = function () {
-      return dialogEl;
+      return dialogElement;
     };
   }
 

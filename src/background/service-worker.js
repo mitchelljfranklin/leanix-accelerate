@@ -1,18 +1,18 @@
+const DEFAULT_SETTINGS = {
+  features: {
+    dataExport: true,
+    printExport: true,
+    documentsExport: true,
+    diagramDetails: true,
+    updateNotification: true,
+    emojiPicker: true,
+  },
+  theme: "default",
+};
+
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === "install") {
-    chrome.storage.sync.set({
-      leanix_extension_settings: {
-        features: {
-          dataExport: true,
-          printExport: true,
-          documentsExport: true,
-          diagramDetails: true,
-          updateNotification: true,
-          emojiPicker: true,
-        },
-        theme: "default",
-      },
-    });
+    chrome.storage.sync.set({ leanix_extension_settings: DEFAULT_SETTINGS });
     console.log("[LeanIX Extension] Installed with default settings");
   }
 });
@@ -36,7 +36,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       return true;
 
     case "resetSettings":
-      chrome.storage.sync.clear(() => {
+      chrome.storage.sync.set({ leanix_extension_settings: DEFAULT_SETTINGS }, () => {
         chrome.runtime.sendMessage({ type: "reload" });
         sendResponse({ success: true });
       });

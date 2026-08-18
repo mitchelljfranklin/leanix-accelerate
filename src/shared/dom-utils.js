@@ -4,11 +4,11 @@ var DOMUtils = {
       const existing = document.querySelector(selector);
       if (existing) return resolve(existing);
 
-      const observer = new MutationObserver((_, obs) => {
-        const el = document.querySelector(selector);
-        if (el) {
-          obs.disconnect();
-          resolve(el);
+      const observer = new MutationObserver((mutations, mutationObserver) => {
+        const element = document.querySelector(selector);
+        if (element) {
+          mutationObserver.disconnect();
+          resolve(element);
         }
       });
 
@@ -55,19 +55,19 @@ var DOMUtils = {
   },
 
   createElement(tag, attrs = {}, children = []) {
-    const el = document.createElement(tag);
+    const element = document.createElement(tag);
     Object.entries(attrs).forEach(([key, value]) => {
-      if (key === "className") el.className = value;
-      else if (key === "textContent") el.textContent = value;
-      else if (key === "innerHTML") el.innerHTML = value;
-      else if (key.startsWith("on")) el.addEventListener(key.slice(2).toLowerCase(), value);
-      else el.setAttribute(key, value);
+      if (key === "className") element.className = value;
+      else if (key === "textContent") element.textContent = value;
+      else if (key === "innerHTML") element.innerHTML = value;
+      else if (key.startsWith("on")) element.addEventListener(key.slice(2).toLowerCase(), value);
+      else element.setAttribute(key, value);
     });
     children.forEach((child) => {
-      if (typeof child === "string") el.appendChild(document.createTextNode(child));
-      else el.appendChild(child);
+      if (typeof child === "string") element.appendChild(document.createTextNode(child));
+      else element.appendChild(child);
     });
-    return el;
+    return element;
   },
 
   isLeanIXPage() {

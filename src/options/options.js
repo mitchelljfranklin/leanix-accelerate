@@ -1,10 +1,10 @@
 const FEATURE_LIST = [
-  { key: "dataExport", label: "Data Export", desc: "Export table data as JSON and Excel" },
-  { key: "printExport", label: "Print Export", desc: "Export documents via browser print dialog" },
-  { key: "documentsExport", label: "Documents Export", desc: "Export document lists (Architecture Decisions) to Excel" },
-  { key: "diagramDetails", label: "Diagram Details", desc: "One-click button to open Diagram Details on diagram pages" },
-  { key: "updateNotification", label: "Update Notification", desc: "Show changelog when the extension is updated" },
-  { key: "emojiPicker", label: "Emoji Picker", desc: "Add an emoji picker to rich-text editors" },
+  { key: "dataExport", label: "Data Export", description: "Export table data as JSON and Excel" },
+  { key: "printExport", label: "Print Export", description: "Export documents via browser print dialog" },
+  { key: "documentsExport", label: "Documents Export", description: "Export document lists (Architecture Decisions) to Excel" },
+  { key: "diagramDetails", label: "Diagram Details", description: "One-click button to open Diagram Details on diagram pages" },
+  { key: "updateNotification", label: "Update Notification", description: "Show changelog when the extension is updated" },
+  { key: "emojiPicker", label: "Emoji Picker", description: "Add an emoji picker to rich-text editors" },
 ];
 
 async function renderFeatureToggles() {
@@ -13,7 +13,7 @@ async function renderFeatureToggles() {
   const features = settings.features || {};
 
   container.innerHTML = "";
-  FEATURE_LIST.forEach(({ key, label, desc }) => {
+  FEATURE_LIST.forEach(({ key, label, description }) => {
     const enabled = features[key] ?? false;
 
     const item = document.createElement("div");
@@ -21,7 +21,7 @@ async function renderFeatureToggles() {
 
     const info = document.createElement("div");
     info.className = "toggle-info";
-    info.innerHTML = `<strong>${label}</strong><span class="desc">${desc}</span>`;
+    info.innerHTML = `<strong>${label}</strong><span class="desc">${description}</span>`;
 
     const toggle = document.createElement("label");
     toggle.className = "toggle";

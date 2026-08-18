@@ -7,7 +7,7 @@ window.__leanixFeatures__ = window.__leanixFeatures__ || {};
     init: function (DOM, settings) {
       var intersectionObserver = null;
 
-      var observeTarget = function (el) {
+      var observeTarget = function (element) {
         if (!document.querySelector("lx-diagrams-container")) return;
         if (intersectionObserver) intersectionObserver.disconnect();
         intersectionObserver = new IntersectionObserver(function (entries) {
@@ -17,7 +17,7 @@ window.__leanixFeatures__ = window.__leanixFeatures__ || {};
             }
           }
         });
-        intersectionObserver.observe(el);
+        intersectionObserver.observe(element);
       };
 
       var existing = document.getElementById("tourEditDiagram");
