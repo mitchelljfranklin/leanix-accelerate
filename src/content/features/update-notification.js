@@ -76,6 +76,15 @@ window.__leanixFeatures__ = window.__leanixFeatures__ || {};
   }
 
   var CHANGELOG = {
+    "1.1.1": {
+      title: "Here\u2019s what\u2019s new in v1.1.1:",
+      changes: [
+        "Fixed Print Export \u2014 every document field now prints again after the Fiori reskin changed the field labels",
+        "Fixed Documents List Export \u2014 Excel downloads now capture every row, including the ones that load as you scroll",
+      ],
+      linkText: "View all features on GitHub \u2192",
+      linkUrl: "https://github.com/mitchelljfranklin/LeanIX-Accelerate#-features",
+    },
     "1.1.0": {
       title: "Here\u2019s what\u2019s new in v1.1.0:",
       changes: [

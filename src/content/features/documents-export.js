@@ -118,69 +118,118 @@ window.__leanixFeatures__ = window.__leanixFeatures__ || {};
         return;
       }
 
-      const headerCells = table.querySelectorAll("thead th");
-      const headers = [];
-      headerCells.forEach(function (th) {
-        const text = th.textContent.trim();
-        if (text) headers.push(text);
-      });
+      const buildAndDownload = function () {
+        const headerCells = table.querySelectorAll("thead th");
+        const headers = [];
+        headerCells.forEach(function (th) {
+          const text = th.textContent.trim();
+          if (text) headers.push(text);
+        });
 
-      const dataRows = [];
-      const bodyRows = table.querySelectorAll("tbody tr.documentsItem");
-      bodyRows.forEach(function (row) {
-        const rowData = [];
+        const dataRows = [];
+        const bodyRows = table.querySelectorAll("tbody tr.documentsItem");
+        bodyRows.forEach(function (row) {
+          const rowData = [];
 
-        const idCell = row.querySelector(".displayIdColumn");
-        rowData.push(idCell ? idCell.textContent.trim() : "");
+          const idCell = row.querySelector(".displayIdColumn");
+          rowData.push(idCell ? idCell.textContent.trim() : "");
 
-        const titleLink = row.querySelector(".titleColumn a");
-        rowData.push(titleLink ? titleLink.textContent.trim() : "");
+          const titleLink = row.querySelector(".titleColumn a");
+          rowData.push(titleLink ? titleLink.textContent.trim() : "");
 
-        const statusBadge = row.querySelector(".statusColumn lx-badge span");
-        rowData.push(statusBadge ? statusBadge.textContent.trim() : "");
+          const statusBadge = row.querySelector(".statusColumn lx-badge span");
+          rowData.push(statusBadge ? statusBadge.textContent.trim() : "");
 
-        const creatorSpan = row.querySelector(".ownerColumn lx-documents-list-creator span");
-        rowData.push(creatorSpan ? creatorSpan.textContent.trim() : "");
+          const creatorSpan = row.querySelector(".ownerColumn lx-documents-list-creator span");
+          rowData.push(creatorSpan ? creatorSpan.textContent.trim() : "");
 
-        const dateSpan = row.querySelector(".lastUpdatedColumn span");
-        rowData.push(dateSpan ? dateSpan.textContent.trim() : "");
+          const dateSpan = row.querySelector(".lastUpdatedColumn span");
+          rowData.push(dateSpan ? dateSpan.textContent.trim() : "");
 
-        dataRows.push(rowData);
-      });
+          dataRows.push(rowData);
+        });
 
-      const rows = [];
-      if (headers.length > 0) {
-        rows.push(headers);
+        const rows = [];
+        if (headers.length > 0) {
+          rows.push(headers);
+        } else {
+          rows.push(["ID", "Title", "Status", "Creator", "Last Updated"]);
+        }
+        dataRows.forEach(function (dataRow) {
+          rows.push(dataRow);
+        });
+
+        const workbook = XLSX.utils.book_new();
+        const worksheet = XLSX.utils.aoa_to_sheet(rows);
+
+        worksheet["!cols"] = [
+          { wch: 14 },
+          { wch: 60 },
+          { wch: 12 },
+          { wch: 22 },
+          { wch: 14 },
+        ];
+
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Documents");
+
+        const buffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+        const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        const url = URL.createObjectURL(blob);
+        const downloadLink = document.createElement("a");
+        downloadLink.href = url;
+        downloadLink.download = "documents-export-" + Date.now() + ".xlsx";
+        downloadLink.click();
+        URL.revokeObjectURL(url);
+      };
+
+      const scrollContainer = findScrollContainer(table.parentElement);
+      if (scrollContainer) {
+        const originalScrollTop = scrollContainer.scrollTop;
+        scrollUntilAllRowsLoaded(scrollContainer, table, function () {
+          buildAndDownload();
+          scrollContainer.scrollTop = originalScrollTop;
+        });
       } else {
-        rows.push(["ID", "Title", "Status", "Creator", "Last Updated"]);
+        buildAndDownload();
       }
-      dataRows.forEach(function (dataRow) {
-        rows.push(dataRow);
-      });
-
-      const workbook = XLSX.utils.book_new();
-      const worksheet = XLSX.utils.aoa_to_sheet(rows);
-
-      worksheet["!cols"] = [
-        { wch: 14 },
-        { wch: 60 },
-        { wch: 12 },
-        { wch: 22 },
-        { wch: 14 },
-      ];
-
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Documents");
-
-      const buffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-      const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-      const url = URL.createObjectURL(blob);
-      const downloadLink = document.createElement("a");
-      downloadLink.href = url;
-      downloadLink.download = "documents-export-" + Date.now() + ".xlsx";
-      downloadLink.click();
-      URL.revokeObjectURL(url);
     },
   };
+
+  function findScrollContainer(startElement) {
+    var current = startElement;
+    while (current && current !== document.body) {
+      if (current.scrollHeight > current.clientHeight) {
+        return current;
+      }
+      current = current.parentElement;
+    }
+    return null;
+  }
+
+  function scrollUntilAllRowsLoaded(scrollContainer, table, callback) {
+    var previousCount = -1;
+    var stableTicks = 0;
+
+    function tick() {
+      scrollContainer.scrollTop = scrollContainer.scrollHeight;
+
+      var currentCount = table.querySelectorAll("tbody tr.documentsItem").length;
+      if (currentCount === previousCount) {
+        stableTicks += 1;
+      } else {
+        previousCount = currentCount;
+        stableTicks = 0;
+      }
+
+      if (stableTicks >= 3) {
+        callback();
+      } else {
+        setTimeout(tick, 250);
+      }
+    }
+
+    tick();
+  }
 
   function createMenuOption(label, onClick) {
     const element = document.createElement("div");

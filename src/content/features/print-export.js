@@ -32,7 +32,7 @@ window.__leanixFeatures__ = window.__leanixFeatures__ || {};
     const sections = [];
 
     function processEditorBlock(block) {
-      const titleEl = block.querySelector(":scope > .formTitle");
+      const titleEl = block.querySelector(".formTitle");
       if (!titleEl) return;
       const titleText = titleEl.textContent.trim();
 
@@ -131,7 +131,7 @@ window.__leanixFeatures__ = window.__leanixFeatures__ || {};
     let bodyHtml = "";
 
     function processEditorBlock(block) {
-      const titleEl = block.querySelector(":scope > .formTitle");
+      const titleEl = block.querySelector(".formTitle");
       if (!titleEl) return "";
       const titleText = titleEl.textContent.trim();
 

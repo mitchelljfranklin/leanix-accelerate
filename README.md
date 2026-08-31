@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-v1.1.0-blue" />
+  <img src="https://img.shields.io/badge/version-v1.1.1-blue" />
   <img src="https://img.shields.io/badge/manifest-V3-4c1" />
   <img src="https://img.shields.io/badge/license-GPL%203.0-brightgreen" />
   <img src="https://img.shields.io/badge/Chrome-supported-4285F4?logo=googlechrome&logoColor=white" />
