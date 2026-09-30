@@ -76,6 +76,14 @@ window.__leanixFeatures__ = window.__leanixFeatures__ || {};
   }
 
   var CHANGELOG = {
+    "1.1.2": {
+      title: "Here\u2019s what\u2019s new in v1.1.2:",
+      changes: [
+        "Emoji Picker Updated with a reduced list of Emojis for better performance and only items that would be used.",
+      ],
+      linkText: "View all features on GitHub \u2192",
+      linkUrl: "https://github.com/mitchelljfranklin/LeanIX-Accelerate#-features",
+    },
     "1.1.0": {
       title: "Here\u2019s what\u2019s new in v1.1.0:",
       changes: [

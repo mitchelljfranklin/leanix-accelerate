@@ -537,13 +537,13 @@ var blob = new Blob([buf], { type: "application/vnd.openxmlformats-officedocumen
 5. Packages each into `dist/leanix-extension-{Browser}.zip`
 
 Output:
-- `src/content/content-bundle.js` — single IIFE bundle of all content scripts (~172 KB), gitignored
+- `src/content/content-bundle.js` — single IIFE bundle of all content scripts (~100 KB), gitignored
 - `dist/leanix-extension-chrome.zip`
 - `dist/leanix-extension-edge.zip`
 - `dist/leanix-extension-firefox.zip`
 
 Gotchas:
-- `createZip()` shells out to the `zip` CLI (`zip -r`). On Windows `zip` is usually missing, so zips fail silently (prints "Try: cd dist && zip -r ...") while the bundle still builds. The bundle is the real artifact; zips are only needed for store upload.
+- `createZip()` writes the ZIPs itself using Node's built-in `zlib` (`writeZip` + `crc32`) — no external `zip` CLI dependency, so `npm run build` works on Windows, macOS, and Linux.
 - The version is NOT injected into manifests. Bump `version` in BOTH `package.json` and `manifest.json` manually to release.
 - The update notification reads `chrome.runtime.getManifest().version` (the manifest version) and matches it against a `CHANGELOG` object in `update-notification.js`. Every release must add a matching `CHANGELOG` entry or the notification silently falls back to the latest key.
 
