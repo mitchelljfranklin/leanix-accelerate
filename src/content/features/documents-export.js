@@ -137,8 +137,18 @@ window.__leanixFeatures__ = window.__leanixFeatures__ || {};
           const titleLink = row.querySelector(".titleColumn a");
           rowData.push(titleLink ? titleLink.textContent.trim() : "");
 
-          const statusBadge = row.querySelector(".statusColumn lx-badge span");
-          rowData.push(statusBadge ? statusBadge.textContent.trim() : "");
+          const statusCell = row.querySelector(".statusColumn");
+          let statusText = "";
+          if (statusCell) {
+            // New LeanIX markup uses <lx-documents-status-badge><ui5-tag>Status</ui5-tag></...>;
+            // older pages used <lx-badge><span>Status</span></lx-badge>.
+            const statusBadge =
+              statusCell.querySelector("lx-documents-status-badge ui5-tag") ||
+              statusCell.querySelector("ui5-tag") ||
+              statusCell.querySelector("lx-badge span");
+            statusText = (statusBadge || statusCell).textContent.trim();
+          }
+          rowData.push(statusText);
 
           const creatorSpan = row.querySelector(".ownerColumn lx-documents-list-creator span");
           rowData.push(creatorSpan ? creatorSpan.textContent.trim() : "");

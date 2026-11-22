@@ -111,14 +111,15 @@ The exported `.xlsx` file contains:
 |---|---|
 | ID | The document display ID (e.g. BCAPR-17) |
 | Title | The document title from the title link |
-| Status | The status badge text (Draft, Proposed, Accepted, Rejected) |
+| Status | The status badge text (Draft, Proposed, Accepted, Rejected, Deprecated, Superseded) |
 | Creator | The creator's name |
 | Last Updated | The last modified date |
 
 ### Tips
-- All rows currently visible in the table are exported — scroll or change page size to include more
+- Every row is included — the export automatically scrolls the list to load all rows, then restores your scroll position
 - If the button doesn't appear, the page may not have a `table.table-hover` element — check with your admin
 - The button matches the height of the native LeanIX buttons for a clean look
+- If the Status column is blank, make sure you're on v1.1.3 or later — LeanIX changed the status badge markup and older versions can no longer read it
 
 <p align="right"><sub><a href="#">⬆ back to top</a></sub></p>
 
